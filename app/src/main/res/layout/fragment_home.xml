@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment"
     android:id="@+id/recycler_view"
+    android:background="@color/black"
     >
 
 </androidx.recyclerview.widget.RecyclerView>
