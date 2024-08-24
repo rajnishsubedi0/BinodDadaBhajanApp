@@ -28,10 +28,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 public class HomeFragment extends Fragment {
-    String url_mocky="https://mocki.io/v1/87adc3df-fead-4f1d-a814-484832df664e";
+    String url_mocky="https://mocki.io/v1/9221f64f-bca3-4003-a32f-173067d06ce9 ";
+    public static ArrayList<DataHolder> arrayList=new ArrayList<DataHolder>();
     private Button button;
     RecyclerView recyclerView;
     AdapterClass myAdapterClass;
@@ -46,11 +48,7 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         recyclerView=root.findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getContext());
 
-        myAdapterClass=new AdapterClass();
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(myAdapterClass);
 
         return root;
     }
@@ -64,7 +62,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-       // loadVolleyData();
+
+        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getContext());
+
+        myAdapterClass=new AdapterClass();
+        loadVolleyData();
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(myAdapterClass);
 
 
     }
@@ -92,10 +96,10 @@ public class HomeFragment extends Fragment {
                     JSONArray array=response.getJSONArray("employees");
                     for (int i=0; i<array.length();i++){
                         JSONObject object=array.getJSONObject(i);
-                        String name=object.getString("firstname");
-                        // arrayList.add(new DataHolder(name));
-                       Toast.makeText(getContext(), ""+name, Toast.LENGTH_SHORT).show();
-                        // recyclerAdapterclass.notifyDataSetChanged();
+                        String name=object.getString("name");
+                        arrayList.add(new DataHolder(name));
+                      // Toast.makeText(getContext(), ""+name, Toast.LENGTH_SHORT).show();
+                        myAdapterClass.notifyDataSetChanged();
                     }
                     Toast.makeText(getContext(), "Succeed", Toast.LENGTH_SHORT).show();
 

@@ -1,5 +1,7 @@
 package com.example.realbhajanbinoddada.ui.home;
 
+import static com.example.realbhajanbinoddada.ui.home.HomeFragment.arrayList;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.realbhajanbinoddada.R;
 
+
 public class AdapterClass extends RecyclerView.Adapter<ViewHolderClass> {
-    String []arr={"rajju","ritesh","hola"};
+
 
     @NonNull
     @Override
@@ -21,13 +24,13 @@ public class AdapterClass extends RecyclerView.Adapter<ViewHolderClass> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderClass holder, int position) {
-    String string=arr[holder.getAdapterPosition()].toString();
+    String string=arrayList.get(holder.getAdapterPosition()).getName();
     holder.textView.setText(string);
 
     }
 
     @Override
     public int getItemCount() {
-        return arr.length;
+        return arrayList.size();
     }
 }
