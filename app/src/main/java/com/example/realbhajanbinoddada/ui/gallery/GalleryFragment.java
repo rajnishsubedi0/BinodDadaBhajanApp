@@ -19,7 +19,9 @@ import com.example.realbhajanbinoddada.R;
 import com.example.realbhajanbinoddada.databinding.FragmentGalleryBinding;
 
 public class GalleryFragment extends Fragment {
-
+    String url="https://wallpaperaccess.com/full/265770.jpg";
+    String a_url="https://raw.githubusercontent.com/rajnishsubedi0/hosting_items/f4e4554f45c709e07f7fbbcbce7255fc4511a52f/pngwing.com(1).png";
+    ImageView imageView;
     private FragmentGalleryBinding binding;
         public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -28,11 +30,8 @@ public class GalleryFragment extends Fragment {
 
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        String url="https://wallpaperaccess.com/full/265770.jpg";
-        ImageView imageView=root.findViewById(R.id.my_image);
-        Glide.with(getContext()).load(url)
-                .centerCrop()
-                .into(imageView);
+         imageView=root.findViewById(R.id.my_image);
+
 
         return root;
     }
@@ -43,5 +42,11 @@ public class GalleryFragment extends Fragment {
         binding = null;
     }
 
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Glide.with(getContext()).load(a_url)
+                .centerCrop()
+                .into(imageView);
+    }
 }

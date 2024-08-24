@@ -29,11 +29,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
 
 public class HomeFragment extends Fragment {
     String url_mocky="https://mocki.io/v1/9221f64f-bca3-4003-a32f-173067d06ce9 ";
     public static ArrayList<DataHolder> arrayList=new ArrayList<DataHolder>();
+
     private Button button;
     RecyclerView recyclerView;
     AdapterClass myAdapterClass;
@@ -49,8 +52,7 @@ public class HomeFragment extends Fragment {
 
         recyclerView=root.findViewById(R.id.recycler_view);
 
-
-        return root;
+         return root;
     }
 
     @Override
@@ -64,28 +66,17 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getContext());
-
         myAdapterClass=new AdapterClass();
         loadVolleyData();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(myAdapterClass);
 
 
+
     }
 
-    private void usingAwait() {
-        CompletableFuture<String> future=CompletableFuture.supplyAsync(()->{
-            try {
-                while(true){
-                Thread.sleep(5000);
-                    loadVolleyData();
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
 
-        });
-    }
+
 
     public void loadVolleyData(){
         RequestQueue queue= Volley.newRequestQueue(getContext());
@@ -116,7 +107,6 @@ public class HomeFragment extends Fragment {
             }
         });
         queue.add(jsonObjectRequest);
-        //recyclerAdapterclass.notifyDataSetChanged();
 
     }
 }
