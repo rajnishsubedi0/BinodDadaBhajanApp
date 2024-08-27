@@ -11,7 +11,7 @@
     app:cardElevation="1dp"
 
 
-    app:cardCornerRadius="12dp">
+    app:cardCornerRadius="17dp">
 
     <TextView
         android:textColor="@color/white"
