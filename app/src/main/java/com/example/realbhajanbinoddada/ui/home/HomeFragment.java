@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
     AdapterClass myAdapterClass;
     private FragmentHomeBinding binding;
-    public boolean my_bool;
+    public boolean my_bool=false;
     public int toast_count=0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -53,6 +53,29 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         recyclerView=root.findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getContext());
+
+        myAdapterClass=new AdapterClass();
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(myAdapterClass);
+        Timer timer=new Timer();
+
+
+            timer.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    boolean a = loadVolleyData();
+                    if (a == true) {
+                        timer.cancel();
+                    }
+
+                }
+
+            } , 0, 2000);
+
+
+
 
          return root;
     }
@@ -67,67 +90,51 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getContext());
 
-        myAdapterClass=new AdapterClass();
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(myAdapterClass);
-
-        Timer timer=new Timer();
-        timer.schedule(new TimerTask() {
-            int i=0;
-            @Override
-            public void run() {
-                boolean a=loadVolleyData();
-                if (a==true){
-                  timer.cancel();
-                }
-
-            }
-        },0,2000);
 
 
     }
 
 
 
-
     public boolean loadVolleyData(){
 
-        RequestQueue queue= Volley.newRequestQueue(getContext());
-        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, url_bhajan_sangraha, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                boolean bool;
-                try {
-                    JSONArray array=response.getJSONArray("employees");
-                    for (int i=0; i<array.length();i++){
-                        JSONObject object=array.getJSONObject(i);
-                       // String name=object.getString("name");
-                        String name=object.getString("bhajan_nepali");
-                        arrayList.add(new DataHolder(name));
+            RequestQueue queue = Volley.newRequestQueue(getContext());
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url_bhajan_sangraha, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    arrayList.clear();
+                    try {
+                        JSONArray array = response.getJSONArray("employees");
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject object = array.getJSONObject(i);
+                            // String name=object.getString("name");
+                            String name = object.getString("bhajan_nepali");
+                            arrayList.add(new DataHolder(name));
 
-                        myAdapterClass.notifyDataSetChanged();
+                            myAdapterClass.notifyDataSetChanged();
+                        }
+
+                        my_bool = true;
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+
                     }
 
-                    my_bool=true;
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-
                 }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (toast_count == 0) {
+                        Toast.makeText(getContext(), "Error fetching data", Toast.LENGTH_SHORT).show();
+                        toast_count = 1;
+                    }
+                    my_bool = false;
+                }
+            });
+            queue.add(jsonObjectRequest);
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-              if(toast_count==0){
-                  Toast.makeText(getContext(), "Error fetching data", Toast.LENGTH_SHORT).show();
-                  toast_count=1;
-              }
-              my_bool = false;
-            }
-        });
-        queue.add(jsonObjectRequest);
-        return my_bool;
+            return my_bool;
+
     }
 }
